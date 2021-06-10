@@ -13,7 +13,7 @@ SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) as TimeStamp,
    cs-uri-stem,
    sc-status,
    time-taken
-FROM '[LOGFILEPATH]'
+FROM 'c:\temp\IIS logs\*.log'
 WHERE cs-uri-stem LIKE '/EWS/mrsproxy.svc%'
 ORDER BY TimeStamp
 ```
