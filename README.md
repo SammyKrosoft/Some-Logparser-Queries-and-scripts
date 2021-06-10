@@ -16,6 +16,4 @@ SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) as TimeStamp,
 FROM '[LOGFILEPATH]'
 WHERE cs-uri-stem LIKE '/EWS/mrsproxy.svc%'
 ORDER BY TimeStamp
-``` 
-
-![image](https://user-images.githubusercontent.com/33433229/121607554-3ca1d300-ca1e-11eb-9f42-e65987f8f861.png)
+```
