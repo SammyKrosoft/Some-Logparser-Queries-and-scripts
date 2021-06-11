@@ -21,7 +21,7 @@ ORDER BY TimeStamp
 #### Pull IIS logs data with all fields for a specific URI (/EWS/mrsproxy.svc)
 
 ```sql
-/* Pull all requests by a single user */
+/* Pull all requests*/
 /* If an error is returned there may be no matches */
 /*#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status time-taken*/
 
