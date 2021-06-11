@@ -66,3 +66,7 @@ FROM     'c:\temp\IIS logs\*.log'
 WHERE    cs-uri-stem LIKE '/EWS/mrsproxy.svc%'
 ORDER BY TimeStamp
 ```
+
+> NOTE: Saving direclty in a CSV file will not print the results into Logparser Studio.
+> ![image](https://user-images.githubusercontent.com/33433229/121620577-92837480-ca38-11eb-88e3-4ff1a3873a96.png)
+
