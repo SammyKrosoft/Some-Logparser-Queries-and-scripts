@@ -40,8 +40,23 @@ SELECT   TO_LOCALTIME(TO_TIMESTAMP(date, time)) as TimeStamp,
          sc-win32-status, 
          time-taken
 
-FROM 'c:\temp\IIS logs\*.log'
-WHERE cs-uri-stem LIKE '/EWS/mrsproxy.svc%'
+FROM     'c:\temp\IIS logs\*.log'
+WHERE    cs-uri-stem LIKE '/EWS/mrsproxy.svc%'
 ORDER BY TimeStamp
 ```
 
+#### To save the results into a CSV
+
+Simply use the following stance:
+```sql
+INTO     'C:\temp\My_CSV_Results.CSV'
+```
+
+```sql
+SELECT   TO_LOCALTIME(TO_TIMESTAMP(date, time)) as TimeStamp,
+         cs-username
+INTO     'c:\temp\IISLog Filtered for MRSProxy.CSV'
+FROM     'c:\temp\IIS logs\*.log'
+WHERE    cs-uri-stem LIKE '/EWS/mrsproxy.svc%'
+ORDER BY TimeStamp
+```
