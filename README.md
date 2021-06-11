@@ -52,9 +52,15 @@ Simply use the following stance:
 INTO     'C:\temp\My_CSV_Results.CSV'
 ```
 
+For example, taking the above complete SQL like request, adding the INTO 'Myfile.csv' :
+
 ```sql
 SELECT   TO_LOCALTIME(TO_TIMESTAMP(date, time)) as TimeStamp,
-         cs-username
+         cs-username,
+         cs-uri-stem,
+         sc-status,
+         time-taken
+
 INTO     'c:\temp\IISLog Filtered for MRSProxy.CSV'
 FROM     'c:\temp\IIS logs\*.log'
 WHERE    cs-uri-stem LIKE '/EWS/mrsproxy.svc%'
