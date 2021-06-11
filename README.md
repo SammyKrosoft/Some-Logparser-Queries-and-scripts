@@ -71,3 +71,42 @@ ORDER BY TimeStamp
 > 
 > ![image](https://user-images.githubusercontent.com/33433229/121620577-92837480-ca38-11eb-88e3-4ff1a3873a96.png)
 
+
+# Logparser requests for users and apps inventory
+
+## Show all ActiveSync users
+
+```sql
+SELECT   cs-username AS UserID, 
+	cs(User-Agent) AS Application, 
+	cs-uri-stem AS Vdir,
+	s-ip AS SERVER,
+	c-ip AS CLIENT,
+	cs-method,
+	Count(*)
+FROM     '[LOGFILEPATH]'
+WHERE    cs-uri-stem LIKE '%Microsoft-Server-ActiveSync%' and UserID not like '%health%'
+GROUP BY UserID, Application, Vdir, Server, Client, cs-method
+ORDER BY COUNT(*) DESC
+```
+
+Log Parser Studio Log type: ```IISW3CLOG```
+
+## All Autodiscover requests
+
+```sql
+SELECT   cs-username AS UserID, 
+	cs(User-Agent) AS Application, 
+	cs-uri-stem AS Vdir,
+	s-ip AS SERVER,
+	c-ip AS CLIENT,
+	cs-method,
+	Count(*)
+FROM     '[LOGFILEPATH]'
+WHERE    cs-uri-stem LIKE '%Autodiscover%' and UserID not like '%health%'
+GROUP BY UserID, Application, Vdir, Server, Client, cs-method
+ORDER BY COUNT(*) DESC
+```
+
+Log Parser Studio Log type: ```IISW3CLOG```
+
