@@ -4,6 +4,9 @@
 
 - [Logparser v2.2 (required for LogParser Studio to work)](https://www.microsoft.com/en-us/download/confirmation.aspx?id=24659)
 
+# LogParser scripts
+
+I'll dump here some LogParser PowerShell scripts generated with LogParser Studio for quick reference. I'll document these later on.
 
 # Some-Logparser-Queries
 Some Logparser Queries to help my peers
