@@ -15,7 +15,7 @@ Some Logparser Queries to help my peers
 
 Here we make use of
 ```sql
-QUANTIZE(Time Stamp,Sample rate in seconds)
+QUANTIZE(Time_Stamp,Sample_rate_in_seconds)
 ```
 Example, the Sample rate of 3600 seconds will count all occurences by 3600 seconds = 1 hour
 
@@ -40,6 +40,12 @@ SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(TO_STRING(EXTRACT_PREFIX([#Fields: dat
 	sc-status,
 	etc...
 	# NOTE: don't put a comma after the last element of the SELECT clause
+
+COUNT(*) AS Messages
+FROM '\\$Server\$TrackingLogPaths\*.log'
+WHERE event-id='RECEIVE'
+GROUP BY cs-username,sc-status,etc...,Hour /*<<<<<<<<<<<<<----- Group by the quantized time named on the SELECT clause*/ 
+ORDER BY Hour ASC
 ```
 
 #### Pull IIS logs data with some fields, and convert IIS UTC time to local time, for a specific URI (/EWS/mrsproxy.svc)
