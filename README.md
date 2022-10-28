@@ -11,8 +11,29 @@ In the repository, along with this Readme.md file, you'll find some LogParser Po
 # Some-Logparser-Queries
 Some Logparser Queries to help my peers
 
-####
+#### Quantize by hour - use TO_LOCALTIME and QUANTIZE
 
+Here we make use of
+```sql
+QUANTIZE(Time Stamp,Sample rate in seconds)
+```
+Example, the Sample rate of 3600 seconds will count all occurences by 3600 seconds = 1 hour
+
+An application of QUANTIZE:
+```sql
+SELECT
+    QUANTIZE(TO_TIMESTAMP(date, time), 60) AS Minute,
+    COUNT(*) AS Total,  
+    SUM(sc-bytes) AS TotBytesSent 
+FROM
+    '[LOGFILEPATH]'
+WHERE
+    date > '2016-04-23'
+GROUP BY M 
+ORDER BY M
+```
+
+An example on an IIS log (we need to EXTRACT the "#Fields: date-time" string from the IIS log before calling TO_TIMESTAMP():
 ```sql
 SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(TO_STRING(EXTRACT_PREFIX([#Fields: date-time],0,'.')), 'yyyy-MM-ddThh:mm:ss'),3600)) AS Hour,
 	cs-username,
