@@ -1,7 +1,8 @@
 # LogParser download links
 
-[LogParser Studio](https://www.microsoft.com/en-ca/download/details.aspx?id=24659)
-[Logparser v2.2 (required for LogParser Studio to work)](https://www.microsoft.com/en-us/download/confirmation.aspx?id=24659)
+- [LogParser Studio](https://www.microsoft.com/en-ca/download/details.aspx?id=24659)
+
+- [Logparser v2.2 (required for LogParser Studio to work)](https://www.microsoft.com/en-us/download/confirmation.aspx?id=24659)
 
 
 # Some-Logparser-Queries
