@@ -11,6 +11,16 @@ In the repository, along with this Readme.md file, you'll find some LogParser Po
 # Some-Logparser-Queries
 Some Logparser Queries to help my peers
 
+####
+
+```sql
+SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(TO_STRING(EXTRACT_PREFIX([#Fields: date-time],0,'.')), 'yyyy-MM-ddThh:mm:ss'),3600)) AS Hour,
+	cs-username,
+	sc-status,
+	etc...
+	# NOTE: don't put a comma after the last element of the SELECT clause
+```
+
 #### Pull IIS logs data with some fields, and convert IIS UTC time to local time, for a specific URI (/EWS/mrsproxy.svc)
 
 ```sql
