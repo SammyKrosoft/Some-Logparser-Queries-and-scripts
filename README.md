@@ -6,7 +6,7 @@
 
 # LogParser scripts
 
-I'll dump here some LogParser PowerShell scripts generated with LogParser Studio for quick reference. I'll document these later on.
+In the repository, along with this Readme.md file, you'll find some LogParser PowerShell scripts generated with LogParser Studio for quick reference. I'll document these later on.
 
 # Some-Logparser-Queries
 Some Logparser Queries to help my peers
