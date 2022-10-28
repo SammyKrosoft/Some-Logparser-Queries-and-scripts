@@ -33,7 +33,7 @@ GROUP BY M
 ORDER BY M
 ```
 
-An example on an IIS log (we need to EXTRACT the "#Fields: date-time" string from the IIS log before calling TO_TIMESTAMP():
+An example on an Exchange Tracking log (we need to EXTRACT the "#Fields: date-time" string from the tracking log before calling TO_TIMESTAMP():
 ```sql
 SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(TO_STRING(EXTRACT_PREFIX([#Fields: date-time],0,'.')), 'yyyy-MM-ddThh:mm:ss'),3600)) AS Hour,
 	cs-username,
