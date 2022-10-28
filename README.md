@@ -1,6 +1,6 @@
 # LogParser download links
 
-- [LogParser Studio](https://www.microsoft.com/en-ca/download/details.aspx?id=24659)
+- [LogParser Studio](https://techcommunity.microsoft.com/gxcuf89792/attachments/gxcuf89792/Exchange/16744/1/LPSV2.D2.zip)
 
 - [Logparser v2.2 (required for LogParser Studio to work)](https://www.microsoft.com/en-us/download/confirmation.aspx?id=24659)
 
