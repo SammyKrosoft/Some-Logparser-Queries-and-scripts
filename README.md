@@ -1,3 +1,8 @@
+# LogParser Studio download link
+
+https://www.microsoft.com/en-ca/download/details.aspx?id=24659
+
+
 # Some-Logparser-Queries
 Some Logparser Queries to help my peers
 
