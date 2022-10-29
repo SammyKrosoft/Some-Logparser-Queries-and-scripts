@@ -13,11 +13,14 @@ Some Logparser Queries to help my peers
 
 #### Quantize by hour - use TO_LOCALTIME and QUANTIZE
 
-Here we make use of
+Hint if you want to count stuff that happened by minute (60 seconds) or my hour (3600 seconds), we make use of
+
 ```sql
 QUANTIZE(Time_Stamp,Sample_rate_in_seconds)
 ```
 Example, the Sample rate of 3600 seconds will count all occurences by 3600 seconds = 1 hour
+
+> NOTE: for IIS logs, on newer servers, you may need to select the W3CLOG instead of IISW3CLOG if the latter does not return anything.
 
 An application of QUANTIZE:
 ```sql
