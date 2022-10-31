@@ -23,6 +23,7 @@ Example, the Sample rate of 3600 seconds will count all occurences by 3600 secon
 > NOTE: for IIS logs, on newer servers, you may need to select the W3CLOG instead of IISW3CLOG if the latter does not return anything.
 
 An application of QUANTIZE:
+*Log Type:***W3CLOG**** 
 ```sql
 SELECT
     QUANTIZE(TO_TIMESTAMP(date, time), 60) AS Minute,
@@ -32,11 +33,11 @@ FROM
     '[LOGFILEPATH]'
 WHERE
     date > '2016-04-23'
-GROUP BY M 
-ORDER BY M
+GROUP BY Minute
+ORDER BY Minute
 ```
 
-An example on an Exchange Tracking log (we need to EXTRACT the "#Fields: date-time" string from the tracking log before calling TO_TIMESTAMP():
+An example on an Exchange Tracking log (specific to Exchange Tracking Logs, we need to EXTRACT the "#Fields: date-time" string from the tracking log before calling TO_TIMESTAMP():
 ```sql
 SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(TO_STRING(EXTRACT_PREFIX([#Fields: date-time],0,'.')), 'yyyy-MM-ddThh:mm:ss'),3600)) AS Hour,
 	cs-username,
