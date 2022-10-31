@@ -23,7 +23,9 @@ Example, the Sample rate of 3600 seconds will count all occurences by 3600 secon
 > NOTE: for IIS logs, on newer servers, you may need to select the W3CLOG instead of IISW3CLOG if the latter does not return anything.
 
 An application of QUANTIZE:
-*Log Type:***W3CLOG**** 
+
+*Log Type:***W3CLOG****
+
 ```sql
 SELECT
     QUANTIZE(TO_TIMESTAMP(date, time), 60) AS Minute,
