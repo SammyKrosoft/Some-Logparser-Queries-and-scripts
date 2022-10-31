@@ -39,7 +39,26 @@ GROUP BY Minute
 ORDER BY Minute
 ```
 
+Another example, on an IIS log, with QUANTIZE, and TO_LOCALTIME to convert to local time:
+
+```sql
+SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(date, time), 300)) AS FiveMinute,
+       cs-uri-stem,
+       AVG(time-taken) as AverageTime,
+       LogFileName
+/*Use the below to target specific log file once found:*/      
+/*FROM 'C:\temp\IISLogs\u_ex22101715_x.log'*/
+/*Use the below to use LogParser Studio's Log files selected file or folder:*/
+FROM '[LOGFILEPATH]'
+WHERE cs-uri-stem not like '%/healthcheck.htm'
+GROUP BY FiveMinute, LogFileNAme,cs-uri-stem
+```
+
+
 An example on an Exchange Tracking log (specific to Exchange Tracking Logs, we need to EXTRACT the "#Fields: date-time" string from the tracking log before calling TO_TIMESTAMP():
+
+*Log Type:***EELLOG****
+
 ```sql
 SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(TO_STRING(EXTRACT_PREFIX([#Fields: date-time],0,'.')), 'yyyy-MM-ddThh:mm:ss'),3600)) AS Hour,
 	cs-username,
