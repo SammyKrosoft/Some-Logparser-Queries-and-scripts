@@ -44,7 +44,7 @@ Another example, on an IIS log, with QUANTIZE, and TO_LOCALTIME to convert to lo
 *Log Type:***W3CLOG****
 
 ```sql
-SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(date, time), 300)) AS FiveMinute,
+SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(date, time), 300)) AS FiveMinuteInterval,
        cs-uri-stem,
        AVG(time-taken) as AverageTime,
        LogFileName
@@ -53,7 +53,7 @@ SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(date, time), 300)) AS FiveMinute,
 /*Use the below to use LogParser Studio's Log files selected file or folder:*/
 FROM '[LOGFILEPATH]'
 WHERE cs-uri-stem not like '%/healthcheck.htm'
-GROUP BY FiveMinute, LogFileNAme,cs-uri-stem
+GROUP BY FiveMinuteInterval, LogFileNAme,cs-uri-stem
 ```
 
 
