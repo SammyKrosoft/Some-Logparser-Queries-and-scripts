@@ -39,7 +39,9 @@ GROUP BY Minute
 ORDER BY Minute
 ```
 
-Another example, on an IIS log, with QUANTIZE, and TO_LOCALTIME to convert to local time:
+Another example, on an IIS log, with QUANTIZE, and TO_LOCALTIME to convert to local time - this one quantize to display information (URI-Stem, Average of time taken in which log file, quantized in 5 minutes time slices:
+
+*Log Type:***W3CLOG****
 
 ```sql
 SELECT TO_LOCALTIME(QUANTIZE(TO_TIMESTAMP(date, time), 300)) AS FiveMinute,
