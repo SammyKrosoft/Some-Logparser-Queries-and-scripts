@@ -197,3 +197,25 @@ ORDER BY COUNT(*) DESC
 
 Log Parser Studio Log type: ```IISW3CLOG```
 
+## Query hits on specific URL (example with Autodiscover again), between 2 date/time stamps
+
+Use the ```sql TimeVariable BETWEEN TimeStamp('01/23/2022 06:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/23/2022 20:00:00','MM/dd/yyyy hh:mm:ss')```  synthax after the ```sql WHERE ``` clause.
+
+> NOTE1: you can use ```sql TO_LOCALTIME(SYSTEM_TIMESTAMP()) ``` if you want to query between a time in the past and the current time ... 
+> NOTE2: you can also substract a few minutes in case the latest data don't fill a quantized hour at the time of the run for example using the ```sql SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm')) ``` sequence. use '20','mm' to remove 20 minutes, or '01','hh' to substract 1 hour, ...
+
+```sql
+SELECT QUANTIZE(TO_TIMESTAMP(date, time), 900) AS QuarterHour,
+       /*cs-username as UserName,*/
+       cs-uri-stem as TargetURL,
+       /*cs(User-Agent) as ClientApp,*/
+	COUNT(*) AS Total
+FROM '\\E2016-01\C$\Users\samdrey.CANADADREY\Downloads\IISLogs\IISLogs\*.log', '\\E2016-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND QuarterHour BETWEEN TimeStamp('10/17/2022 07:00:00','MM/dd/yyyy hh:mm:ss') and TimeStamp('10/17/2022 20:00:00','MM/dd/yyyy hh:mm:ss') 
+/*
+If you want to express time stamp corresponding to current time MINUS 20 minutes:
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
+*/ 
+GROUP BY QuarterHour, TargetURL
+ORDER BY QuarterHour
+```
