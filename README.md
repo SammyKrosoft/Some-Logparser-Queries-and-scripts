@@ -199,6 +199,8 @@ Log Parser Studio Log type: ```IISW3CLOG```
 
 ## Query hits on specific URL (example with Autodiscover again), between 2 date/time stamps
 
+### Example 1 - show URL total hits quantized to every quarter, for Autodiscover, excluding Health Mailboxes, between 2 date/times
+
 Use the ```sql TimeVariable BETWEEN TimeStamp('01/23/2022 06:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/23/2022 20:00:00','MM/dd/yyyy hh:mm:ss')```  synthax after the ```sql WHERE ``` clause.
 
 > NOTE1: you can use ```sql TO_LOCALTIME(SYSTEM_TIMESTAMP()) ``` if you want to query between a time in the past and the current time ... 
@@ -219,3 +221,18 @@ SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
 GROUP BY QuarterHour, TargetURL
 ORDER BY QuarterHour
 ```
+
+### Example 2 - show entries for RPC URL (RPC over HTTP) with user names, between 2 date/times on 2 remote IIS log folders
+
+```sql
+SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS Minute,
+       cs-uri-stem,
+       cs-username,
+	COUNT(*) AS Total 
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log','\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE Minute BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') AND cs-username NOT LIKE '%HealthMailbox%' AND cs-username IS NOT NULL AND cs-uri-stem LIKE '%rpc%'
+GROUP BY Minute,cs-uri-stem, cs-username
+ORDER BY Minute
+```
+
+<img width="235" alt="image" src="https://user-images.githubusercontent.com/33433229/215248868-83de7231-01ae-486e-88bf-67b191d5e9ee.png">
