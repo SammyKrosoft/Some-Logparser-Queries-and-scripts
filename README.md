@@ -236,3 +236,29 @@ ORDER BY Minute
 ```
 
 <img width="235" alt="image" src="https://user-images.githubusercontent.com/33433229/215248868-83de7231-01ae-486e-88bf-67b191d5e9ee.png">
+
+### Example 3 - dump everything just to have an idea of the fields and other filters you can make
+
+
+```sql
+SELECT 
+    TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS LocalTime,
+    *
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log','\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE LocalTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') AND cs-username NOT LIKE '%HealthMailbox%' AND cs-username IS NOT NULL
+ORDER BY LocalTime
+```
+
+And then you want to filter the cs(User-Agent) which is the application used (like Outlook v15.0 for Outlook 2013), you would add on the WHERE clause:
+
+```sql
+cs(User-Agent) LIKE '%Outlook%' AND cs(User-Agent) LIKE '%15.0%'
+```
+
+the full WHERE clause would look like:
+
+```sql
+WHERE LocalTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') AND cs-username NOT LIKE '%HealthMailbox%' AND cs-username IS NOT NULL AND cs(User-Agent) LIKE '%Outlook%' AND cs(User-Agent) LIKE '%15.0%'
+```
+
+Hope this helps on your LogParser queries !
