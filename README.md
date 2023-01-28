@@ -395,7 +395,7 @@ Show grouped stats about User names, target URL, Client Application used, HTTP s
 
 ```sql
 /*
-Show which user names target which URL stem with which Client App, and what's the HTTP status. Counts number of these by User Name, URL stem, client App and HTTP Status
+Show which user names target which URL stem with which Client App, and what's the HTTP status. Counts number of these by User Name, URL stem, client App and HTTP Status between 2 dates
 */
 
 SELECT cs-username as UserName,
