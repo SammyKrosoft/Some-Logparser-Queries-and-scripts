@@ -373,15 +373,15 @@ And also below an example to show entries between a time in the past and the cur
 Display all IIS hits with UserName, URL stem, HTTP query, Client App, HTTP status,...
 */
 
-SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS DateTime,
+SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS LocalTime,
        cs-username as UserName,
        cs-uri-stem as TargetURL,
        cs-uri-query as HTTPQuery,
        cs(User-Agent) as ClientApp,
        sc-status as HTTPStatus
 FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
-/*WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND DateTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') */
-WHERE DateTime BETWEEN TimeStamp('01/28/2023 16:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP()
+/*WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND LocalTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') */
+WHERE LocalTime BETWEEN TimeStamp('01/28/2023 16:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP() AND TargetURL LIKE '%/autodiscover/autodiscover%'
 
 /*
 If you want to express time stamp corresponding to current time MINUS 20 minutes:
@@ -389,7 +389,6 @@ SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
 */ 
 
 ORDER BY DateTime DESC
-
 ```
 
 
