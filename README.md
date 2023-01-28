@@ -199,6 +199,34 @@ Log Parser Studio Log type: ```IISW3CLOG```
 
 ## Query hits on specific URL (example with Autodiscover again), between 2 date/time stamps
 
+### Example 0 - dump everything just to have an idea of the fields and other filters you can make
+
+The below query dumps all the IIS file intormation (note the wildcard * on the SELECT clause), including the time stamps (TO_TIMESTAMP(date,time)) converted to local time (TO_LOCALTIME()) as the default IIS time is the Universal Time Coordinated (UTC).
+I also filter some user names I don't want (cs-username NOT LIKE '') and filtering out the blank cs-username.
+
+**Log Type** : ```W3CLOG```
+
+```sql
+SELECT 
+    TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS LocalTime,
+    *
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log','\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE LocalTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') AND cs-username NOT LIKE '%HealthMailbox%' AND cs-username IS NOT NULL
+ORDER BY LocalTime
+```
+
+And then you want to filter the cs(User-Agent) which is the application used (like Outlook v15.0 for Outlook 2013), you would add on the WHERE clause:
+
+```sql
+cs(User-Agent) LIKE '%Outlook%' AND cs(User-Agent) LIKE '%15.0%'
+```
+
+the full WHERE clause would look like:
+
+```sql
+WHERE LocalTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') AND cs-username NOT LIKE '%HealthMailbox%' AND cs-username IS NOT NULL AND cs(User-Agent) LIKE '%Outlook%' AND cs(User-Agent) LIKE '%15.0%'
+```
+
 ### Example 1 - show URL total hits quantized to every quarter, for Autodiscover, excluding Health Mailboxes, between 2 date/times
 
 Use the ```sql TimeVariable BETWEEN TimeStamp('01/23/2022 06:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/23/2022 20:00:00','MM/dd/yyyy hh:mm:ss')```  synthax after the ```sql WHERE ``` clause.
@@ -237,28 +265,27 @@ ORDER BY Minute
 
 <img width="235" alt="image" src="https://user-images.githubusercontent.com/33433229/215248868-83de7231-01ae-486e-88bf-67b191d5e9ee.png">
 
-### Example 3 - dump everything just to have an idea of the fields and other filters you can make
-
-
-```sql
-SELECT 
-    TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS LocalTime,
-    *
-FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log','\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
-WHERE LocalTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') AND cs-username NOT LIKE '%HealthMailbox%' AND cs-username IS NOT NULL
-ORDER BY LocalTime
-```
-
-And then you want to filter the cs(User-Agent) which is the application used (like Outlook v15.0 for Outlook 2013), you would add on the WHERE clause:
+### Example 3 - show IIS files lines between to dates, with only the time stamp, User name, target URL, client application and HTTP status
 
 ```sql
-cs(User-Agent) LIKE '%Outlook%' AND cs(User-Agent) LIKE '%15.0%'
+SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS DateTime,
+       cs-username as UserName,
+       cs-uri-stem as TargetURL,
+       cs(User-Agent) as ClientApp,
+       sc-status as HTTPStatus
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+/*WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND DateTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') */
+WHERE DateTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') AND cs-username NOT LIKE '%HealthMailbox%' AND cs-username IS NOT NULL AND cs(User-Agent) LIKE '%Outlook%' AND cs(User-Agent) LIKE '%15.0%'
+
+/*
+HINT:
+If you want to express time stamp corresponding to current time MINUS 20 minutes:
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
+For example between a set date in the past, and current date/time minus 20 minutes
+*/ 
+
+ORDER BY DateTime
 ```
 
-the full WHERE clause would look like:
-
-```sql
-WHERE LocalTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') AND cs-username NOT LIKE '%HealthMailbox%' AND cs-username IS NOT NULL AND cs(User-Agent) LIKE '%Outlook%' AND cs(User-Agent) LIKE '%15.0%'
-```
 
 Hope this helps on your LogParser queries !
