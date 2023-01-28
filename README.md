@@ -391,7 +391,7 @@ SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
 ORDER BY LocalTime DESC
 ```
 
-Show grouped stats about User names, target URL, Client Application used, HTTP status and number of hits ...
+Show grouped stats about User names, target URL, Client Application used, HTTP status and number of hits, between 2 dates - a date in the past and current time. Local time is used:
 
 ```sql
 /*
@@ -418,6 +418,31 @@ Here's a sample output with my lab stats (connected with only one user)
 
 <img width="448" alt="image" src="https://user-images.githubusercontent.com/33433229/215294559-4fd4c2f3-8a1a-444c-8ca7-8714b59e700d.png">
 
+
+Here's another example, grouped user names, HTTP status and number of hits regardless of the URL Stem and other fields, just the user and HTTP status code, still between 2 dates - a date in the past and current time. Local time is used:
+
+```sql
+/*
+Show which user names target which URL stem with which Client App, and what's the HTTP status. Counts number of these by User Name, URL stem, client App and HTTP Status between 2 dates
+*/
+
+SELECT cs-username as UserName,
+       sc-status as HTTPStatus,
+       COUNT(*) as NumberOfHits
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE TO_LOCALTIME(TO_TIMESTAMP(date, time)) BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP() AND cs(User-Agent) LIKE '%Outlook%' AND cs(User-Agent) LIKE '%15.0%' AND UserName IS NOT NULL
+
+/*
+If you want to express time stamp corresponding to current time MINUS 20 minutes:
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
+*/ 
+
+GROUP BY UserName, HTTPStatus
+```
+
+And a (very) sample Output with my unique user:
+
+<img width="176" alt="image" src="https://user-images.githubusercontent.com/33433229/215294671-621d979b-72b1-4279-a5f8-693ab7d3edaf.png">
 
 
 Hope this helps on your LogParser queries !
