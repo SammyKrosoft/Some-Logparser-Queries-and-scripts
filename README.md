@@ -414,4 +414,10 @@ SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
 GROUP BY UserName, TargetURL, ClientApp, HTTPStatus
 ```
 
+Here's a sample output with my lab stats (connected with only one user)
+
+<img width="448" alt="image" src="https://user-images.githubusercontent.com/33433229/215294559-4fd4c2f3-8a1a-444c-8ca7-8714b59e700d.png">
+
+
+
 Hope this helps on your LogParser queries !
