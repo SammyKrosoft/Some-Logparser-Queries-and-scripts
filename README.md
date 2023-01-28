@@ -265,6 +265,29 @@ ORDER BY Minute
 
 <img width="235" alt="image" src="https://user-images.githubusercontent.com/33433229/215248868-83de7231-01ae-486e-88bf-67b191d5e9ee.png">
 
+And also below an example to show entries between a time in the past and the current time for all URL stems if you want to monitor until current activity for example:
+
+```sql
+SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS DateTime,
+       cs-username as UserName,
+       cs-uri-stem as TargetURL,
+       cs-uri-query as HTTPQuery,
+       cs(User-Agent) as ClientApp,
+       sc-status as HTTPStatus
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+/*WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND DateTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') */
+WHERE DateTime BETWEEN TimeStamp('01/28/2023 16:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP()
+
+/*
+If you want to express time stamp corresponding to current time MINUS 20 minutes:
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
+*/ 
+
+ORDER BY DateTime DESC
+
+```
+
+
 ### Example 3 - show IIS files lines between to dates, with only the time stamp, User name, target URL, client application and HTTP status
 
 ```sql
@@ -291,8 +314,79 @@ Here's an extract for my lab servers (I only have 1 active user so you'll see al
 
 <img width="461" alt="image" src="https://user-images.githubusercontent.com/33433229/215290687-d743fc82-bf35-4f1d-8707-a3def98abc0d.png">
 
+#### Example 4 - using COUNT(*) as HitCount
+
+NOTE: When you use COUNT(*) on the SELECT clause to count the number of Hits, you must use GROUP BY before ORDER BY, followed by all the headers you have in SELECT (except the COUNT() header of course)
+
+NOTE2: You can also uses QUANTIZE( Time stamp, seconds ) along with COUNT() to group the number of hits in a time interval like 5, 15, or 60 minutes:
+
+```sql
+SELECT QUANTIZE(TO_TIMESTAMP(date, time), 900) AS QuarterHour,
+       cs-username as UserName,
+       cs-uri-stem as TargetURL,
+       cs(User-Agent) as ClientApp,
+	COUNT(*) AS Total
+
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND QuarterHour BETWEEN TimeStamp('01/28/2023 20:00:00','MM/dd/yyyy hh:mm:ss') AND TO_LOCALTIME(SYSTEM_TIMESTAMP())
+
+GROUP BY QuarterHour,UserName, TargetURL, ClientApp
+ORDER BY QuarterHour
+
+```
+
+> NOTE : here I aadded the QUANTIZE( time stamp , seconds ), and COUNT(*) as Total and then added GROUP BY with all SELECT fields.
+
+> NOTE 2 : I also used a WHERE filter to filter the search/results between a time in the past, and the system time.
 
 
+### Other examples wich are variants from the above examples...
 
+```sql
+/*
+Display Autodiscover hits and UserName, URL stem, HTTP query, Client App, HTTP status, and hits in case there are many at the same date, time and second...
+*/
+
+SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS DateTime,
+       cs-username as UserName,
+       cs-uri-stem as TargetURL,
+       cs-uri-query as HTTPQuery,
+       cs(User-Agent) as ClientApp,
+       sc-status as HTTPStatus,
+       COUNT(*) as Hits
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+/*WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND DateTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') */
+WHERE DateTime BETWEEN TimeStamp('01/28/2023 20:00:00','MM/dd/yyyy hh:mm:ss') AND TO_LOCALTIME(SYSTEM_TIMESTAMP()) AND cs-username NOT LIKE '%HealthMailbox%' AND cs-username IS NOT NULL
+
+/*
+If you want to express time stamp corresponding to current time MINUS 20 minutes:
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
+*/ 
+
+GROUP BY DateTime, UserName, TargetURL, HttpQuery, ClientApp, HTTPStatus
+ORDER BY DateTime DESC
+```
+
+```sql
+/*
+Dumps Time, UserName, URL stem, Client app, and HTTP status between a date in the past, and current date for Autodiscover entries in IIS log.
+*/
+
+SELECT TO_TIMESTAMP(date, time) AS LocalTime,
+       cs-username as UserName,
+       cs-uri-stem as TargetURL,
+       sc-status as HTTPStatus,
+       cs(User-Agent) as ClientApp
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND LocalTime BETWEEN TimeStamp('01/28/2023 20:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP()
+
+/*
+If you want to express time stamp corresponding to current time MINUS 20 minutes:
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
+*/ 
+
+ORDER BY LocalTime
+
+```
 
 Hope this helps on your LogParser queries !
