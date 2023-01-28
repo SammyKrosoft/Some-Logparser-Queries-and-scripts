@@ -265,29 +265,6 @@ ORDER BY Minute
 
 <img width="235" alt="image" src="https://user-images.githubusercontent.com/33433229/215248868-83de7231-01ae-486e-88bf-67b191d5e9ee.png">
 
-And also below an example to show entries between a time in the past and the current time for all URL stems if you want to monitor until current activity for example:
-
-```sql
-SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS DateTime,
-       cs-username as UserName,
-       cs-uri-stem as TargetURL,
-       cs-uri-query as HTTPQuery,
-       cs(User-Agent) as ClientApp,
-       sc-status as HTTPStatus
-FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
-/*WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND DateTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') */
-WHERE DateTime BETWEEN TimeStamp('01/28/2023 16:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP()
-
-/*
-If you want to express time stamp corresponding to current time MINUS 20 minutes:
-SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
-*/ 
-
-ORDER BY DateTime DESC
-
-```
-
-
 ### Example 3 - show IIS files lines between to dates, with only the time stamp, User name, target URL, client application and HTTP status
 
 ```sql
@@ -388,5 +365,32 @@ SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
 ORDER BY LocalTime
 
 ```
+
+And also below an example to show entries between a time in the past and the current time for all URL stems if you want to monitor until current activity for example:
+
+```sql
+/*
+Display all IIS hits with UserName, URL stem, HTTP query, Client App, HTTP status,...
+*/
+
+SELECT TO_LOCALTIME(TO_TIMESTAMP(date, time)) AS DateTime,
+       cs-username as UserName,
+       cs-uri-stem as TargetURL,
+       cs-uri-query as HTTPQuery,
+       cs(User-Agent) as ClientApp,
+       sc-status as HTTPStatus
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+/*WHERE TargetURL like '%/autodiscover/autodiscover%' AND cs-username NOT LIKE '%HealthMailbox%' AND DateTime BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND TimeStamp('01/28/2023 23:59:59','MM/dd/yyyy hh:mm:ss') */
+WHERE DateTime BETWEEN TimeStamp('01/28/2023 16:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP()
+
+/*
+If you want to express time stamp corresponding to current time MINUS 20 minutes:
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
+*/ 
+
+ORDER BY DateTime DESC
+
+```
+
 
 Hope this helps on your LogParser queries !
