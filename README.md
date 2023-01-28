@@ -388,7 +388,7 @@ If you want to express time stamp corresponding to current time MINUS 20 minutes
 SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
 */ 
 
-ORDER BY DateTime DESC
+ORDER BY LocalTime DESC
 ```
 
 
