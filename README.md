@@ -391,5 +391,27 @@ SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
 ORDER BY LocalTime DESC
 ```
 
+Show grouped stats about User names, target URL, Client Application used, HTTP status and number of hits ...
+
+```sql
+/*
+Show which user names target which URL stem with which Client App, and what's the HTTP status. Counts number of these by User Name, URL stem, client App and HTTP Status
+*/
+
+SELECT cs-username as UserName,
+       cs-uri-stem as TargetURL,
+       cs(User-Agent) as ClientApp,
+       sc-status as HTTPStatus,
+       COUNT(*) as NumberOfHits
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE TO_LOCALTIME(TO_TIMESTAMP(date, time)) BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP() AND ClientApp LIKE '%Outlook%' AND ClientApp LIKE '%15.0%' AND UserName IS NOT NULL
+
+/*
+If you want to express time stamp corresponding to current time MINUS 20 minutes:
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
+*/ 
+
+GROUP BY UserName, TargetURL, ClientApp, HTTPStatus
+```
 
 Hope this helps on your LogParser queries !
