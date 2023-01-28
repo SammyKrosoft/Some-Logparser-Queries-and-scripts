@@ -287,5 +287,12 @@ For example between a set date in the past, and current date/time minus 20 minut
 ORDER BY DateTime
 ```
 
+Here's an extract for my lab servers (I only have 1 active user so you'll see always the same for me:
+
+<img width="461" alt="image" src="https://user-images.githubusercontent.com/33433229/215290687-d743fc82-bf35-4f1d-8707-a3def98abc0d.png">
+
+
+
+
 
 Hope this helps on your LogParser queries !
