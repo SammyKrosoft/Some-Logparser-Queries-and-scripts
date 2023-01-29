@@ -419,7 +419,7 @@ Here's a sample output with my lab stats (connected with only one user)
 <img width="448" alt="image" src="https://user-images.githubusercontent.com/33433229/215294559-4fd4c2f3-8a1a-444c-8ca7-8714b59e700d.png">
 
 
-Here's another example, grouped user names, HTTP status and number of hits regardless of the URL Stem and other fields, just the user and HTTP status code, still between 2 dates - a date in the past and current time. Local time is used:
+Here's another example, grouped user names, HTTP status and number of hits regardless of the URL Stem and other fields, just the user and HTTP status code, still between 2 dates - a date in the past and current time. Local time is used. Also, there is a filtrer on the Application (Outlook) and its version (15.0 = Outlook 2013) to only display Outlook versions connecting to IIS:
 
 ```sql
 /*
