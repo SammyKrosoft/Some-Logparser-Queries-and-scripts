@@ -444,5 +444,57 @@ And a (very) sample Output with my unique user:
 
 <img width="176" alt="image" src="https://user-images.githubusercontent.com/33433229/215294671-621d979b-72b1-4279-a5f8-693ab7d3edaf.png">
 
+And here is another variant, same query as above, but I removed the version filter (%15.0%). I generated another user connection from Outlook 2016 this time:
+
+```sql
+/*
+Show which user names target which URL stem with which Client App, and what's the HTTP status. Counts number of these by User Name, URL stem, client App and HTTP Status between 2 dates
+*/
+
+SELECT cs-username as UserName,
+       cs-uri-stem as TargetURL,
+       cs(User-Agent) as ClientApp,
+       sc-status as HTTPStatus,
+       COUNT(*) as NumberOfHits
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE TO_LOCALTIME(TO_TIMESTAMP(date, time)) BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP() AND ClientApp LIKE '%Outlook%' AND UserName IS NOT NULL
+
+GROUP BY UserName, TargetURL, ClientApp, HTTPStatus
+```
+
+And here's the result:
+
+<img width="373" alt="image" src="https://user-images.githubusercontent.com/33433229/215305405-f0e8cda0-d7a9-4ca1-903b-efae3189d530.png">
+
+If I only want the user names who hit the server, regardless of the Outlook version, and regardless of the URL Outlook targetted, I simply comment the items I don't want to see in the SELECT clause, and don't forget to remove what we comment or remove on SELECT from the GROUP BY clause.
+> NOTE: if you comment or remove the "Property as MyCustomName" from SELECT and if you want to filter on this property that you removed, you need to filter on the original field name.
+
+
+```sql
+/*
+Count the number of hits to any URL, by user and HTTP status, and show the number of hits.
+*/
+
+SELECT cs-username as UserName,
+       /*cs-uri-stem as TargetURL,*/
+       /*cs(User-Agent) as ClientApp,*/
+       sc-status as HTTPStatus,
+       COUNT(*) as NumberOfHits
+FROM '\\E2019-01\C$\inetpub\logs\LogFiles\W3SVC1\*.log', '\\E2019-02\C$\inetpub\logs\LogFiles\W3SVC1\*.log'
+WHERE TO_LOCALTIME(TO_TIMESTAMP(date, time)) BETWEEN TimeStamp('01/28/2023 00:00:00','MM/dd/yyyy hh:mm:ss') AND SYSTEM_TIMESTAMP() AND cs(User-Agent) LIKE '%Outlook%' AND UserName IS NOT NULL
+
+/*
+If you want to express time stamp corresponding to current time MINUS 20 minutes:
+SUB(TO_LOCALTIME(SYSTEM_TIMESTAMP()),TIMESTAMP('20','mm'))
+*/ 
+
+GROUP BY UserName, HTTPStatus
+```
+
+And thet sample result:
+
+<img width="191" alt="image" src="https://user-images.githubusercontent.com/33433229/215305583-1c19ff4f-577a-4d3a-9675-594e5c3e4ff4.png">
+
+
 
 Hope this helps on your LogParser queries !
