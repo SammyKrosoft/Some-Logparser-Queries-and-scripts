@@ -11,7 +11,7 @@ In the repository, along with this Readme.md file, you'll find some LogParser Po
 # Some-Logparser-Queries
 Some Logparser Queries to help my peers
 
-#### Quantize by hour - use TO_LOCALTIME and QUANTIZE
+## Quantize by hour - use TO_LOCALTIME and QUANTIZE
 
 Hint if you want to count stuff that happened by minute (60 seconds) or my hour (3600 seconds), we make use of
 
@@ -88,7 +88,9 @@ GROUP BY cs-username,sc-status,etc...,Hour /*<<<<<<<<<<<<<----- Group by the qua
 ORDER BY Hour ASC
 ```
 
-#### Pull IIS logs data with some fields, and convert IIS UTC time to local time, for a specific URI (/EWS/mrsproxy.svc)
+## Getting intel from IIS Logs
+
+### Pull IIS logs data with some fields, and convert IIS UTC time to local time, for a specific URI (/EWS/mrsproxy.svc)
 
 ```sql
 /* Pull all requests*/
@@ -105,7 +107,7 @@ WHERE cs-uri-stem LIKE '/EWS/mrsproxy.svc%'
 ORDER BY TimeStamp
 ```
 
-#### Pull IIS logs data with all fields for a specific URI (/EWS/mrsproxy.svc)
+### Pull IIS logs data with all fields for a specific URI (/EWS/mrsproxy.svc)
 
 ```sql
 /* Pull all requests*/
@@ -132,7 +134,7 @@ WHERE    cs-uri-stem LIKE '/EWS/mrsproxy.svc%'
 ORDER BY TimeStamp
 ```
 
-#### To save the results into a CSV
+### To save the results into a CSV
 
 Simply use the following stance:
 ```sql
