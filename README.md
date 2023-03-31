@@ -56,7 +56,7 @@ WHERE cs-uri-stem not like '%/healthcheck.htm'
 GROUP BY FiveMinuteInterval, LogFileNAme,cs-uri-stem
 ```
 
-The below is similar to the above, instead we display the number of hits per URL reached (cs-uri-stem), in each log file:
+The below is similar to the above, instead we display the number of hits per URL reached (cs-uri-stem), in each log file, without timestamps and quantizing:
 
 ```sql
 SELECT cs-uri-stem,
@@ -70,7 +70,7 @@ ORDER BY hits DESC
 ```
 
 
-An example on an Exchange Tracking log (specific to Exchange Tracking Logs, we need to EXTRACT the "#Fields: date-time" string from the tracking log before calling TO_TIMESTAMP():
+An other example on an Exchange Tracking log (specific to Exchange Tracking Logs, we need to EXTRACT the "#Fields: date-time" string from the tracking log before calling TO_TIMESTAMP():
 
 *Log Type:***EELLOG****
 
@@ -293,7 +293,7 @@ Here's an extract for my lab servers (I only have 1 active user so you'll see al
 
 <img width="461" alt="image" src="https://user-images.githubusercontent.com/33433229/215290687-d743fc82-bf35-4f1d-8707-a3def98abc0d.png">
 
-#### Example 4 - using COUNT(*) as HitCount
+### Example 4 - using COUNT(*) as HitCount
 
 NOTE: When you use COUNT(*) on the SELECT clause to count the number of Hits, you must use GROUP BY before ORDER BY, followed by all the headers you have in SELECT (except the COUNT() header of course)
 
