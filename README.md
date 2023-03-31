@@ -16,7 +16,7 @@ Some Logparser Queries to help my peers
 Hint if you want to count stuff that happened by minute (60 seconds) or my hour (3600 seconds), we make use of
 
 ```sql
-QUANTIZE(Time_Stamp,Sample_rate_in_seconds)
+QUANTIZE(Time_Stamp, Sample_rate_in_seconds)
 ```
 Example, the Sample rate of 3600 seconds will count all occurences by 3600 seconds = 1 hour
 
